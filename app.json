@@ -1,0 +1,66 @@
+{
+  "expo": {
+    "name": "GuessWork",
+    "slug": "guesswork",
+    "version": "1.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/branding/logo-1.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "GuessWork"
+    },
+    "splash": {
+      "image": "./assets/images/branding/logo-1.png",
+      "imageWidth": 50,
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/branding/logo-1.png",
+        "backgroundColor": "#000000"
+      },
+      "package": "com.c3dric_d3v0n.GuessWork"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/branding/logo-1.png"
+    },
+    "plugins": [
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/Ubuntu/Ubuntu-Regular.ttf",
+            "./assets/fonts/Ubuntu/Ubuntu-Medium.ttf",
+            "./assets/fonts/Ubuntu/Ubuntu-Light.ttf",
+            "./assets/fonts/Ubuntu/Ubuntu-Bold.ttf"
+          ]
+        }
+      ],
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/branding/logo-1.png",
+          "imageWidth": 50,
+          "resizeMode": "contain",
+          "backgroundColor": "#000000"
+        }
+      ],
+      "expo-sqlite"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "eeda58fa-ffd8-48d5-9a15-3deb47d446fc"
+      }
+    }
+  }
+}
