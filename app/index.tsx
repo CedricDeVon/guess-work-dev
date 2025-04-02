@@ -7,6 +7,8 @@ import { CommonHeader } from '@/components/CommonHeader'
 import { BrandingTitle } from '@/components/BrandingTitle'
 import { BrandingFooter } from '@/components/BrandingFooter'
 import { usePreventBackPress } from '@/hooks/usePreventBackPress'
+import { Layer1CipherCryptographer } from '@/library/cryptographers/layer1CipherCryptographer'
+import { Layer2CipherCryptographer } from '@/library/cryptographers/layer2CipherCryptographer'
 
 import('@/app/+not-found')
 import('@/app/auth/log-in')
