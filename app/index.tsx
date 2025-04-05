@@ -12,9 +12,11 @@ import { useDisableComponentsDuringNavigation } from '@/hooks/useDisableComponen
 
 import useMainStore from '@/store/mainStore'
 
+/*
 import('@/app/+not-found')
 import('@/app/auth/log-in')
 import('@/app/auth/sign-up')
+*/
 
 export default function Index() {
     const mainStore: any = useMainStore()

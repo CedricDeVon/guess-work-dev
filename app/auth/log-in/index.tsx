@@ -1,3 +1,14 @@
+import { View, Text } from 'react-native'
+
+export default function LogIn() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Hello from Login</Text>
+    </View>
+  )
+}
+
+/*
 import { View } from 'react-native'
 import { router } from 'expo-router'
 import { useToastController } from '@tamagui/toast'
@@ -112,4 +123,4 @@ export default function LogIn() {
         </>
     )
 }
-
+*/
