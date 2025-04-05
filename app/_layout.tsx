@@ -17,25 +17,10 @@ import { useListenToNetwork } from '@/hooks/useListenToNetwork'
 
 export default function RootLayout() {
     const mainStore: any = useMainStore()
-
+    
     SplashScreen.preventAutoHideAsync()
     
     useListenToNetwork()
-
-    const [fontsLoaded, fontsLoadedError] = useFonts({
-        'Ubuntu': require('@/assets/fonts/Ubuntu/Ubuntu-Light.ttf'),
-    })
-
-    useEffect(() => {
-        if (fontsLoaded || fontsLoadedError) {
-            SplashScreen.hideAsync()
-        }
-
-    }, [fontsLoaded, fontsLoadedError])
-
-    if (!fontsLoaded && !fontsLoadedError) {
-        return null
-    }
 
     return (
         <>
