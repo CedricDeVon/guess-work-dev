@@ -1,7 +1,6 @@
 import { View, Text } from 'react-native'
 import { router } from 'expo-router'
 import { useToastController } from '@tamagui/toast'
-import { Check, Eye, EyeOff } from '@tamagui/lucide-icons'
 import { Button, XStack, YStack, Input, Spinner, Form, Checkbox, Label, ScrollView } from 'tamagui'
 
 import useMainStore from '@/store/mainStore'
@@ -14,18 +13,85 @@ import { EmailValidator } from '@/library/validators/emailValidator'
 import { PasswordValidator } from '@/library/validators/passwordValidator'
 
 export default function LogIn() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={{ color: 'red' }}>Hello from Login</Text>
-    </View>
-  )
+    const mainStore: any = useMainStore()
+    const toast: any = useToastController()
+
+    const handleGoBackOnPress: Function = async () => {
+        router.back()
+    }
+
+    const handleEmailInputOnChangeText: Function = async (value: any) => {
+        mainStore.updateAuthLogInForm({ email: value })
+    }
+
+    const handleShowPasswordInputOnPress: Function = async () => {
+        mainStore.updateAuthLogInForm({ showPassword: !mainStore.authLogInForm?.showPassword })
+    }
+
+    const handlePasswordInputOnChangeText: Function = async (value: any) => {
+        mainStore.updateAuthLogInForm({ password: value })
+    }
+
+    const handleLogInFormSubmission: Function = async () => {
+        try {
+            mainStore.updateApplicationGlobalsToSubmitting()
+
+            if (!mainStore.authLogInForm?.email || !mainStore.authLogInForm?.password) {
+                toast.show('Please Input Your email And Password', { native: true })
+                mainStore.updateApplicationGlobalsToUnSubmitting()
+                return
+            }
+
+            const userGetResult: any = await SupabaseAPI.singleton.readOne(
+                'user',
+                { email: mainStore.authLogInForm?.email },
+                { 'selected-columns': '*, user_state(*)' }
+            )
+            if (!userGetResult.isSuccessful) {
+                toast.show('Something\'s Wrong. Please Try Again', { native: true })
+                mainStore.updateApplicationGlobalsToUnSubmitting()
+                return
+            }
+            if (!userGetResult.data?.length) {
+                toast.show('User Does Not Exist', { native: true })
+                mainStore.updateApplicationGlobalsToUnSubmitting()
+                return
+            }
+            const userAuthResult: any = await SupabaseAPI.singleton.logInUserViaEmailAndPassword(
+                userGetResult.data[0].email, mainStore.authLogInForm?.password
+            )
+            if (!userAuthResult.isSuccessful) {
+                toast.show('Invalid Password. Please Try Again', { native: true })
+                mainStore.updateApplicationGlobalsToUnSubmitting()
+                return
+            }
+
+            toast.show('Success! Please Wait', { native: true })
+            mainStore.updateUserAccount({ userData: userGetResult.data[0], userPassword: mainStore.authLogInForm?.password })
+            mainStore.updateApplicationGlobalsToUnSubmitting()
+            mainStore.resetAuthForms()
+
+            router.push('/user/insights')
+
+        } catch (error: any) {
+            console.log(error)
+            toast.show('Something\'s Wrong. Please Try Again', { native: true })
+            mainStore.updateApplicationGlobalsToUnSubmitting()
+            mainStore.resetAuthForms()
+        }
+    }
+
+    return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={{ color: 'red' }}>Hello from Login</Text>
+        </View>
+    )
 }
 
 /*
 import { View } from 'react-native'
 import { router } from 'expo-router'
 import { useToastController } from '@tamagui/toast'
-import { Check, Eye, EyeOff } from '@tamagui/lucide-icons'
 import { Button, XStack, YStack, Input, Spinner, Form, Checkbox, Label, ScrollView } from 'tamagui'
 
 import useMainStore from '@/store/mainStore'

@@ -172,34 +172,39 @@ export default function SignUp() {
 
     return (
         <>
-            <CommonHeader leftEdgeButtonProperties={{ callback: handleGoBackOnPress }}/>
-            <YStack flex={1} alignItems='center' justifyContent='center'>
-                <ScrollView>
-                    <View height='20%'></View>
-                    <Form onSubmit={handleSignUpFormSubmission}>
-                        <YStack gap='$5' alignItems='center' justifyContent='center'>
-                            <BrandingTitle/>
-                            <YStack width={300} gap='$3'>
-                                <Input value={mainStore.authSignUpForm?.username} disabled={mainStore.applicationGlobals?.isDisabled} onChangeText={handleUsernameInputOnChangeText} maxLength={UserNameValidator.maxLength} placeholder='Username' size='$4' borderWidth={1}/>
-                                <Input value={mainStore.authSignUpForm?.email} disabled={mainStore.applicationGlobals?.isDisabled} onChangeText={handleEmailInputOnChangeText} maxLength={EmailValidator.maxLength} placeholder='Email' size='$4' borderWidth={1}/>
-                                <View></View>
-                                <XStack gap='$3'>
-                                    <Input value={mainStore.authSignUpForm?.password} disabled={mainStore.applicationGlobals?.isDisabled} secureTextEntry={!mainStore.authSignUpForm?.showPassword} onChangeText={handlePasswordInputOnChangeText} maxLength={PasswordValidator.maxLength} placeholder='Password' size='$4' borderWidth={1} width='76%'/>
-                                    <Button disabled={mainStore.applicationGlobals?.isDisabled} onPress={handleShowPasswordInputOnPress} backgroundColor='transparent' icon={<EyeIcon isOn={mainStore.authSignUpForm?.showPassword}/>}></Button>
-                                </XStack>
-                                <Input value={mainStore.authSignUpForm?.confirmPassword} disabled={mainStore.applicationGlobals?.isDisabled} secureTextEntry={!mainStore.authSignUpForm?.showPassword} onChangeText={handleConfirmPasswordInputOnChangeText} maxLength={PasswordValidator.maxLength} placeholder='Confirm Password' size='$4' borderWidth={1}/>
-                                <View></View>
-                                <Form.Trigger asChild disabled={mainStore.applicationGlobals?.isDisabled}>
-                                    <Button disabled={mainStore.applicationGlobals?.isDisabled} borderWidth='$0' color='$white2' backgroundColor='$blue9' pressStyle={{ backgroundColor: '$blue8' }} icon={(mainStore.applicationGlobals?.isSubmitting) ? () => <Spinner color='$white2'/> : undefined}>
-                                        Sign Up
-                                    </Button>
-                                </Form.Trigger>
-                            </YStack>
-                        </YStack>
-                    </Form>
-                </ScrollView>
-            </YStack>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={{ color: 'red' }}>Hello from SignUp</Text>
+            </View>
         </>
     )
 }
 
+/*
+<CommonHeader leftEdgeButtonProperties={{ callback: handleGoBackOnPress }}/>
+<YStack flex={1} alignItems='center' justifyContent='center'>
+    <ScrollView>
+        <View height='20%'></View>
+        <Form onSubmit={handleSignUpFormSubmission}>
+            <YStack gap='$5' alignItems='center' justifyContent='center'>
+                <BrandingTitle/>
+                <YStack width={300} gap='$3'>
+                    <Input value={mainStore.authSignUpForm?.username} disabled={mainStore.applicationGlobals?.isDisabled} onChangeText={handleUsernameInputOnChangeText} maxLength={UserNameValidator.maxLength} placeholder='Username' size='$4' borderWidth={1}/>
+                    <Input value={mainStore.authSignUpForm?.email} disabled={mainStore.applicationGlobals?.isDisabled} onChangeText={handleEmailInputOnChangeText} maxLength={EmailValidator.maxLength} placeholder='Email' size='$4' borderWidth={1}/>
+                    <View></View>
+                    <XStack gap='$3'>
+                        <Input value={mainStore.authSignUpForm?.password} disabled={mainStore.applicationGlobals?.isDisabled} secureTextEntry={!mainStore.authSignUpForm?.showPassword} onChangeText={handlePasswordInputOnChangeText} maxLength={PasswordValidator.maxLength} placeholder='Password' size='$4' borderWidth={1} width='76%'/>
+                        <Button disabled={mainStore.applicationGlobals?.isDisabled} onPress={handleShowPasswordInputOnPress} backgroundColor='transparent' icon={<EyeIcon isOn={mainStore.authSignUpForm?.showPassword}/>}></Button>
+                    </XStack>
+                    <Input value={mainStore.authSignUpForm?.confirmPassword} disabled={mainStore.applicationGlobals?.isDisabled} secureTextEntry={!mainStore.authSignUpForm?.showPassword} onChangeText={handleConfirmPasswordInputOnChangeText} maxLength={PasswordValidator.maxLength} placeholder='Confirm Password' size='$4' borderWidth={1}/>
+                    <View></View>
+                    <Form.Trigger asChild disabled={mainStore.applicationGlobals?.isDisabled}>
+                        <Button disabled={mainStore.applicationGlobals?.isDisabled} borderWidth='$0' color='$white2' backgroundColor='$blue9' pressStyle={{ backgroundColor: '$blue8' }} icon={(mainStore.applicationGlobals?.isSubmitting) ? () => <Spinner color='$white2'/> : undefined}>
+                            Sign Up
+                        </Button>
+                    </Form.Trigger>
+                </YStack>
+            </YStack>
+        </Form>
+    </ScrollView>
+</YStack>
+*/
