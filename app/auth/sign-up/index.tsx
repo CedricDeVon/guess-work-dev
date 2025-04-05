@@ -1,7 +1,6 @@
 import { View, Text } from 'react-native'
 import { router } from 'expo-router'
 import { Button, XStack, YStack, Input, Spinner, Form, Checkbox, Label } from 'tamagui'
-import { useToastController } from '@tamagui/toast'
 
 import { EyeIcon } from '@/components/EyeIcon'
 import { CommonHeader } from '@/components/CommonHeader'
@@ -17,8 +16,7 @@ import { ConfirmPasswordValidator } from '@/library/validators/confirmPasswordVa
 
 export default function SignUp() {
     const mainStore: any = useMainStore()
-    const toast: any = useToastController()
-
+    
     const handleGoBackOnPress: Function = async () => {
         router.back()
     }
@@ -44,6 +42,19 @@ export default function SignUp() {
     }
 
     const handleSignUpFormSubmission: Function = async () => {
+
+    }
+
+    return (
+        <>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={{ color: 'red' }}>Hello from SignUp</Text>
+            </View>
+        </>
+    )
+}
+
+/*
         try {
             mainStore.updateApplicationGlobalsToSubmitting()
 
@@ -168,18 +179,7 @@ export default function SignUp() {
             mainStore.updateApplicationGlobalsToUnSubmitting()
             mainStore.resetAuthForms()
         }
-    }
 
-    return (
-        <>
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={{ color: 'red' }}>Hello from SignUp</Text>
-            </View>
-        </>
-    )
-}
-
-/*
 import { View, Text } from 'react-native'
 import { router } from 'expo-router'
 import { Button, XStack, YStack, Input, Spinner, Form, Checkbox, Label } from 'tamagui'
