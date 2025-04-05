@@ -8,6 +8,8 @@ export class UserNameValidator extends Validator {
     
     public static readonly hasWhitespacePattern: RegExp = /.*\s.*/
 
+    public static readonly maxLength: number = 128
+
     private constructor() {
         super()
     }

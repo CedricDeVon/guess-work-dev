@@ -1,9 +1,9 @@
 import { gcm } from '@noble/ciphers/aes'
-import { Cryptographer } from './cryptographer'
 import { randomBytes } from '@noble/ciphers/webcrypto'
 import { utf8ToBytes, bytesToHex, hexToBytes, bytesToUtf8 } from '@noble/ciphers/utils'
 
 import { Result } from '../results/result'
+import { Cryptographer } from './cryptographer'
 import { FailedResult } from '../results/failedResult'
 import { SuccessfulResult } from '../results/successfulResult'
 import { RuntimeBenchmarker } from '../benchmarkers/runtimeBenchmarker'

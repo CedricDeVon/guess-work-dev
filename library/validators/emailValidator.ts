@@ -8,6 +8,8 @@ export class EmailValidator extends Validator {
     
     public static readonly regExpPattern: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 
+    public static readonly maxLength: number = 128
+
     private constructor() {
         super()
     }

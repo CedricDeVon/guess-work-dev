@@ -18,6 +18,8 @@ export class PasswordValidator extends Validator {
 
     public static readonly hasWhitespaceRegExpPattern: RegExp = /.*\s.*/
 
+    public static readonly maxLength: number = 128
+
     private constructor() {
         super()
     }
@@ -27,22 +29,22 @@ export class PasswordValidator extends Validator {
             return new FailedResult(`Argument(s) must be of type string`)
         }
 
-        if (PasswordValidator.lessThanMinimumLengthPattern.test(data)) {
+        if (PasswordValidator.lessThanMinimumLengthRegExpPattern.test(data)) {
             return new FailedResult(`Passwords Must Contain At Least 8 Characters`)
         
-        } else if (PasswordValidator.noLowercasePattern.test(data)) {
+        } else if (PasswordValidator.noLowercaseRegExpPattern.test(data)) {
             return new FailedResult(`Passwords Must Contain At Least 1 Lowercase Character`)
 
-        } else if (PasswordValidator.noUppercasePattern.test(data)) {
+        } else if (PasswordValidator.noUppercaseRegExpPattern.test(data)) {
             return new FailedResult(`Passwords Must Contain At Least 1 Uppercase Character`)
         
-        } else if (PasswordValidator.noNumberPattern.test(data)) {
+        } else if (PasswordValidator.noNumberRegExpPattern.test(data)) {
             return new FailedResult(`Passwords Must Contain At Least 1 Number`)
 
-        } else if (PasswordValidator.noSymbolPattern.test(data)) {
+        } else if (PasswordValidator.noSymbolRegExpPattern.test(data)) {
             return new FailedResult(`Passwords Must Contain At Least 1 Symbol`)
 
-        } else if (PasswordValidator.hasWhitespacePattern.test(data)) {
+        } else if (PasswordValidator.hasWhitespaceRegExpPattern.test(data)) {
             return new FailedResult(`Passwords Must nNot Contain spaces`)
         }
 

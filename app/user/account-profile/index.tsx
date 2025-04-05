@@ -75,7 +75,23 @@ export default function UserAccountProfile() {
     }
 
     const handleAcceptContentLogOutAlertDialogOnPress: Function = async () => {
-        
+        try {
+            mainStore.updateApplicationGlobalsToSubmitting()
+
+            toast.show('Success! Please Wait', { native: true })
+
+            mainStore.updateApplicationGlobalsToUnSubmitting()
+            mainStore.resetAccountProfileForm()
+            mainStore.resetUserAccount()
+
+            router.push('/')
+
+        } catch (error: any) {
+            console.log(error)
+            toast.show('Something\'s Wrong. Please Try Again', { native: true })
+            mainStore.updateApplicationGlobalsToUnSubmitting()
+            mainStore.resetAccountProfileForm()
+        }
     }
 
     const genderSelections: any[] = [
@@ -95,27 +111,28 @@ export default function UserAccountProfile() {
             <YStack flex={1} alignItems='center' justifyContent='center'>
                 <ScrollView width='90%'>
                     <YStack gap='$3'>
+                        {/*
                         <Button onPress={handleUploadingProfilePictureOnPress} width={120} height={120} backgroundColor='transparent'>
                             <Image source={{ uri: mainStore.accountProfileForm?.profilePictureUri }} borderWidth='1' borderRadius={100} borderColor='red' width={100} height={100} resizeMode="fit" />
-                        </Button>
-                        <Input value={mainStore.accountProfileForm?.username} disabled={mainStore.accountProfileForm?.isDisabled} onChangeText={handleUsernameInputOnChangeText} placeholder='Username' keyboardType='text' size='$4' borderWidth={1} maxLength={100}/>
-                        <Input value={mainStore.accountProfileForm?.fullName} disabled={mainStore.accountProfileForm?.isDisabled} onChangeText={handleFullNameInputOnChangeText} placeholder='Full Name' keyboardType='text' size='$4' borderWidth={1} maxLength={100}/>
-                        <Input value={mainStore.accountProfileForm?.bio} disabled={mainStore.accountProfileForm?.isDisabled} onChangeText={handleBioInputOnChangeText} placeholder='Bio' multiline textAlignVertical="top" numberOfLines={5} keyboardType='text' size='$4' borderWidth={1} maxLength={100}/>
+                        </Button>*/}
+                        <Input value={mainStore.accountProfileForm?.username} disabled={mainStore.applicationGlobals?.isDisabled} onChangeText={handleUsernameInputOnChangeText} placeholder='Username' keyboardType='text' size='$4' borderWidth={1} maxLength={100}/>
+                        <Input value={mainStore.accountProfileForm?.fullName} disabled={mainStore.applicationGlobals?.isDisabled} onChangeText={handleFullNameInputOnChangeText} placeholder='Full Name' keyboardType='text' size='$4' borderWidth={1} maxLength={100}/>
+                        <Input value={mainStore.accountProfileForm?.bio} disabled={mainStore.applicationGlobals?.isDisabled} onChangeText={handleBioInputOnChangeText} placeholder='Bio' multiline textAlignVertical="top" numberOfLines={5} keyboardType='text' size='$4' borderWidth={1} maxLength={100}/>
                         <CommonPicker value={mainStore.accountProfileForm?.selectedGender?.value} selections={genderSelections} onPressSelectModalItem={handleGenderSelectItemOnPress} title='Gender'/>
                         <CommonPicker value={mainStore.accountProfileForm?.selectedNationality?.value} selections={nationalitySelections} onPressSelectModalItem={handleNationalitySelectItemOnPress} title='Nationality'/>
                         <ConfirmationAlertDialog
-                            triggerContent={(<Button disabled={mainStore.accountProfileForm?.isDisabled} borderWidth='$0' color='$white2' backgroundColor='$blue9' pressStyle={{ backgroundColor: '$blue8' }}>Save</Button>)}
+                            triggerContent={(<Button disabled={mainStore.applicationGlobals?.isDisabled} borderWidth='$0' color='$white2' backgroundColor='$blue9' pressStyle={{ backgroundColor: '$blue8' }}>Save</Button>)}
                             titleContent={<H6 textAlign='center'>Confirmation</H6>}
                             descriptionContent={<Paragraph textAlign='center'>Are you sure?</Paragraph>}
-                            cancelContent={(<Button disabled={mainStore.accountProfileForm?.isDisabled} onPress={handleCancelContentSaveAlertDialogOnPress}>Cancel</Button>)}
-                            acceptContent={(<Button disabled={mainStore.accountProfileForm?.isDisabled} onPress={handleAcceptContentSaveAlertDialogOnPress} borderWidth='$0' color='$white2' backgroundColor='$blue9' pressStyle={{ backgroundColor: '$blue8' }} icon={(mainStore.accountProfileForm?.isSubmitting) ? () => <Spinner color='$white2' /> : undefined}>Accept</Button>)}
+                            cancelContent={(<Button disabled={mainStore.applicationGlobals?.isDisabled} onPress={handleCancelContentSaveAlertDialogOnPress}>Cancel</Button>)}
+                            acceptContent={(<Button disabled={mainStore.applicationGlobals?.isDisabled} onPress={handleAcceptContentSaveAlertDialogOnPress} borderWidth='$0' color='$white2' backgroundColor='$blue9' pressStyle={{ backgroundColor: '$blue8' }} icon={(mainStore.applicationGlobals?.isSubmitting) ? <Spinner color='$white2' /> : undefined}>Accept</Button>)}
                         />
                         <ConfirmationAlertDialog
-                            triggerContent={(<Button disabled={mainStore.accountProfileForm?.isDisabled} borderWidth='$0' color='$white2' backgroundColor='$red9' pressStyle={{ backgroundColor: '$red8' }}>Log Out</Button>)}
+                            triggerContent={(<Button disabled={mainStore.applicationGlobals?.isDisabled} borderWidth='$0' color='$white2' backgroundColor='$red9' pressStyle={{ backgroundColor: '$red8' }}>Log Out</Button>)}
                             titleContent={<H6 textAlign='center'>Confirmation</H6>}
                             descriptionContent={<Paragraph textAlign='center'>Are you sure?</Paragraph>}
-                            cancelContent={(<Button disabled={mainStore.accountProfileForm?.isDisabled} onPress={handleCancelContentLogOutAlertDialogOnPress}>Cancel</Button>)}
-                            acceptContent={(<Button disabled={mainStore.accountProfileForm?.isDisabled} onPress={handleAcceptContentLogOutAlertDialogOnPress} borderWidth='$0' color='$white2' backgroundColor='$blue9' pressStyle={{ backgroundColor: '$blue8' }} icon={(mainStore.accountProfileForm?.isSubmitting) ? () => <Spinner color='$white2' /> : undefined}>Accept</Button>)}
+                            cancelContent={(<Button disabled={mainStore.applicationGlobals?.isDisabled} onPress={handleCancelContentLogOutAlertDialogOnPress}>Cancel</Button>)}
+                            acceptContent={(<Button disabled={mainStore.applicationGlobals?.isDisabled} onPress={handleAcceptContentLogOutAlertDialogOnPress} borderWidth='$0' color='$white2' backgroundColor='$blue9' pressStyle={{ backgroundColor: '$blue8' }} icon={(mainStore.applicationGlobals?.isSubmitting) ? <Spinner color='$white2' /> : undefined}>Accept</Button>)}
                         />
                     </YStack>
                 </ScrollView>

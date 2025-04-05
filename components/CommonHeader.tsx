@@ -27,6 +27,7 @@ export function CommonHeader(props: any) {
                         leftEdgeButtonProperties ?
                         (<>
                             <Button
+                                disabled={mainStore.applicationGlobals?.isDisabled}
                                 icon={leftEdgeButtonProperties.icon || <ArrowLeft size={commonIconSize}/>}
                                 onPress={leftEdgeButtonProperties.callback || (() => {})}
                                 style={styles.commonHeaderItem1}>
@@ -52,6 +53,7 @@ export function CommonHeader(props: any) {
                         showThemeChangeButton ?
                         (<>
                             <Button
+                                disabled={mainStore.applicationGlobals?.isDisabled}
                                 icon={(mainStore.currentStyleTheme === 'dark') ? <Moon size={commonIconSize}/> : <Sun size={commonIconSize}/>}
                                 onPress={mainStore.changeCurrentStyleTheme}
                                 style={styles.commonHeaderItem1}>
@@ -60,6 +62,7 @@ export function CommonHeader(props: any) {
                         rightEdgeButtonProperties ?
                         (<>
                             <Button
+                                disabled={mainStore.applicationGlobals?.isDisabled}
                                 icon={rightEdgeButtonProperties.icon || <CircleHelp size={commonIconSize}/>}
                                 onPress={rightEdgeButtonProperties.callback || (() => {})}
                                 style={styles.commonHeaderItem1}>
@@ -74,7 +77,7 @@ export function CommonHeader(props: any) {
                 </Paragraph>
             </YStack>
         )
-    })
+    }, [mainStore.applicationGlobals, mainStore.currentStyleTheme])
 
     return (content)
 }

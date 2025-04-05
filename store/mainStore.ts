@@ -1,12 +1,31 @@
 import { create } from 'zustand'
 import Constants from 'expo-constants'
 import Storage from 'expo-sqlite/kv-store'
-import defaultConstants from '@/utils/defaultConstants'
+
+import { defaultConstants } from '@/utils/defaultConstants'
+import { Method2CipherCryptographer } from '@/library/cryptographers/method2CipherCryptographer'
 
 const useMainStore = create((set: any) => ({
-    // (min, max, value bar. tier, value, max score.) item
-    // reset
-
+    userAccount: JSON.parse(Storage.getItemSync('knight-vision_user-account') || JSON.stringify('')) || '',
+    extractUserAccount: (data: any) => {
+        return (data) ? JSON.parse(Method2CipherCryptographer.singleton.decrypt(data).data) : ''
+    },
+    updateUserAccount: (value: any) => {
+        return set((state: any) => {
+            let newData: any = (state.userAccount) ? JSON.parse(Method2CipherCryptographer.singleton.decrypt(state.userAccount).data) : {}
+            value.userPassword = Method2CipherCryptographer.singleton.encrypt(value.userPassword).data
+            newData = Method2CipherCryptographer.singleton.encrypt(JSON.stringify({ ...newData, ...value })).data
+            Storage.setItem('knight-vision_user-account', JSON.stringify(newData))
+            return { userAccount: newData }
+        })
+    },
+    resetUserAccount: () => {
+        return set((state: any) => {
+            const newData: any = ''
+            Storage.setItem('knight-vision_user-account', JSON.stringify(newData))
+            return { userAccount: newData }
+        })
+    },
     applicationVersion: Constants.expoConfig?.version || 'None',
     updateAppVersion: (value: any) => {
         return set((state: any) => {
@@ -18,7 +37,6 @@ const useMainStore = create((set: any) => ({
             return { applicationVersion: 'None' }
         })
     },
-
     currentDateYear: new Date().getFullYear(),
     updateCurrentDateYear: () => {
         return set((state: any) => {
@@ -26,28 +44,12 @@ const useMainStore = create((set: any) => ({
         })
     },
 
-    theme: JSON.parse(Storage.getItemSync('knight-vision_application-theme')) || defaultConstants.THEME,
-    changeTheme: () => {
-        return set((state: any) => {
-            let newTheme: any = state.theme
-            if (!newTheme) {
-                newTheme = defaultConstants.THEME
-                
-            } else {
-                newTheme = (newTheme === 'dark') ? 'light' : 'dark'
-            }
-            
-            Storage.setItem('application-theme', JSON.stringify(newTheme))
-            return { theme: newTheme }
-        })
-    },
-
-    currentStyleTheme: JSON.parse(Storage.getItemSync('knight-vision_current-style-theme')) || defaultConstants.THEME,
+    currentStyleTheme: JSON.parse(Storage.getItemSync('knight-vision_current-style-theme')) || defaultConstants.APPLICATION_THEME,
     updateCurrentStyleTheme: (value: any) => {
         return set((state: any) => {
             let newStyleTheme: any = state.currentStyleTheme
             if (!newStyleTheme) {
-                newStyleTheme = defaultConstants.THEME
+                newStyleTheme = defaultConstants.APPLICATION_THEME
             
             } else {
                 newStyleTheme = value
@@ -71,7 +73,7 @@ const useMainStore = create((set: any) => ({
             return { currentStyleTheme: newStyleTheme }
         })
     },
-    stylesSettings: defaultConstants.STYLES_SETTINGS,
+    stylesSettings: defaultConstants.USER_STYLES,
     updateStylesSettings: (value: any) => {
         return set((state: any) => {
             return { stylesSettings: { ...state.stylesSettings, ...value } }
@@ -79,44 +81,71 @@ const useMainStore = create((set: any) => ({
     },
     resetStylesSettings: () => {
         return set((state: any) => {
-            return { stylesSettings: defaultConstants.STYLES_SETTINGS }
+            return { stylesSettings: defaultConstants.USER_STYLES }
         })
     },
 
-    currentConnectionMode: defaultConstants.CURRENT_CONNECTION_MODE,
-    updateCurrentConnectionMode: (value: any) => {
+    applicationGlobals: defaultConstants.APPLICATION_GLOBALS,
+    updateApplicationGlobals: (value: any) => {
         return set((state: any) => {
-            return { currentConnectionMode: value }
+            return { applicationGlobals: { ...state.applicationGlobals, ...value } }
         })
     },
-    resetCurrentConnectionMode: () => {
+    updateApplicationGlobalsToDisabled: () => {
         return set((state: any) => {
-            return { currentConnectionMode: defaultConstants.CURRENT_CONNECTION_MODE }
+            return { applicationGlobals: { ...state.applicationGlobals, isDisabled: true } }
         })
     },
-    logInForm: defaultConstants.LOG_IN_FORM,
-    updateLogInForm: (value: any) => {
+    updateApplicationGlobalsToEnabled: () => {
         return set((state: any) => {
-            return { logInForm: { ...state.logInForm, ...value } }
+            return { applicationGlobals: { ...state.applicationGlobals, isDisabled: false } }
         })
     },
-    resetLogInForm: () => {
+    updateApplicationGlobalsToSubmitting: () => {
         return set((state: any) => {
-            return { logInForm: defaultConstants.LOG_IN_FORM }
+            return { applicationGlobals: { ...state.applicationGlobals, isSubmitting: true, isDisabled: true } }
         })
     },
-    signUpForm: defaultConstants.SIGN_UP_FORM,
-    updateSignUpForm: (value: any) => {
+    updateApplicationGlobalsToUnSubmitting: () => {
         return set((state: any) => {
-            return { signUpForm: { ...state.signUpForm, ...value } }
+            return { applicationGlobals: { ...state.applicationGlobals, isSubmitting: false, isDisabled: false } }
         })
     },
-    resetSignUpForm: () => {
+    resetApplicationGlobals: () => {
         return set((state: any) => {
-            return { signUpForm: defaultConstants.SIGN_UP_FORM }
+            return { applicationGlobals: defaultConstants.APPLICATION_GLOBALS }
         })
     },
-    accountNewPasswordForm: defaultConstants.ACCOUNT_NEW_PASSWORD_FORM,
+    authLogInForm: defaultConstants.AUTH_LOG_IN_FORM,
+    updateAuthLogInForm: (value: any) => {
+        return set((state: any) => {
+            return { authLogInForm: { ...state.authLogInForm, ...value } }
+        })
+    },
+    resetAuthLogInForm: () => {
+        return set((state: any) => {
+            return { authLogInForm: defaultConstants.AUTH_LOG_IN_FORM }
+        })
+    },
+    authSignUpForm: defaultConstants.AUTH_SIGN_UP_FORM,
+    updateAuthSignUpForm: (value: any) => {
+        return set((state: any) => {
+            return { authSignUpForm: { ...state.authSignUpForm, ...value } }
+        })
+    },
+    resetAuthSignUpForm: () => {
+        return set((state: any) => {
+            return { authSignUpForm: defaultConstants.AUTH_SIGN_UP_FORM }
+        })
+    },
+    resetAuthForms: () => {
+        return set((state: any) => {
+            return { authLogInForm: defaultConstants.AUTH_LOG_IN_FORM, authSignUpForm: defaultConstants.AUTH_SIGN_UP_FORM }
+        })
+    },
+
+
+    accountNewPasswordForm: defaultConstants.USER_ACCOUNT_NEW_PASSWORD,
     updateAccountNewPasswordForm: (value: any) => {
         return set((state: any) => {
             return { accountNewPasswordForm: { ...state.accountNewPasswordForm, ...value } }
@@ -124,10 +153,10 @@ const useMainStore = create((set: any) => ({
     },
     resetAccountNewPasswordForm: () => {
         return set((state: any) => {
-            return { accountNewPasswordForm: defaultConstants.ACCOUNT_NEW_PASSWORD_FORM }
+            return { accountNewPasswordForm: defaultConstants.USER_ACCOUNT_NEW_PASSWORD }
         })
     },
-    achievementsResetProgressForm: defaultConstants.ACHIEVEMENTS_RESET_PROGRESS_FORM,
+    achievementsResetProgressForm: defaultConstants.USER_ACHIEVEMENTS,
     updateAchievementsResetProgressForm: (value: any) => {
         return set((state: any) => {
             return { achievementsResetProgressForm: { ...state.achievementsResetProgressForm, ...value } }
@@ -135,16 +164,16 @@ const useMainStore = create((set: any) => ({
     },
     resetAchievementsResetProgressForm: () => {
         return set((state: any) => {
-            return { achievementsResetProgressForm: defaultConstants.ACHIEVEMENTS_RESET_PROGRESS_FORM }
+            return { achievementsResetProgressForm: defaultConstants.USER_ACHIEVEMENTS }
         })
     },
-    networkStatus: {},
-    updateNetworkStatus: (value: any) => {
+    networkState: {},
+    updateNetworkState: (value: any) => {
         return set((state: any) => {
-            return { networkStatus: value }
+            return { networkState: value }
         })
     },
-    notificationsForm: JSON.parse(Storage.getItemSync('knight-vision_notifications-form')) || defaultConstants.NOTIFICATIONS_FORM,
+    notificationsForm: JSON.parse(Storage.getItemSync('knight-vision_notifications-form')) || defaultConstants.USER_NOTIFICATIONS,
     updateNotificationsForm: (value: any) => {
         return set((state: any) => {
             const newData: any = { notificationsForm: { ...state.notificationsForm, ...value } }
@@ -154,12 +183,12 @@ const useMainStore = create((set: any) => ({
     },
     resetNotificationsForm: () => {
         return set(() => {
-            const newData: any = { notifications: defaultConstants.NOTIFICATIONS_FORM }
+            const newData: any = { notifications: defaultConstants.USER_NOTIFICATIONS }
             Storage.setItem('knight-vision_notifications-form', newData.notificationsForm)
             return newData
         })
     },
-    accountProfileForm: defaultConstants.ACCOUNT_PROFILE_FORM,
+    accountProfileForm: defaultConstants.USER_ACCOUNT_PROFILE,
     updateAccountProfileForm: (value: any) => {
         return set((state: any) => {
             return { accountProfileForm: { ...state.accountProfileForm, ...value } }
@@ -167,7 +196,7 @@ const useMainStore = create((set: any) => ({
     },
     resetAccountProfileForm: () => {
         return set(() => {
-            return { accountProfileForm: defaultConstants.ACCOUNT_PROFILE_FORM }
+            return { accountProfileForm: defaultConstants.USER_ACCOUNT_PROFILE }
         })
     },
 }))

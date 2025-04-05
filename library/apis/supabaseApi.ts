@@ -11,7 +11,7 @@ export class SupabaseAPI extends API {
 
     public static readonly singleton: SupabaseAPI = new SupabaseAPI()
 
-    public constructor() {
+    private constructor() {
         super()
 
         this._idempotencyKeys = new Set<string>()
@@ -40,7 +40,6 @@ export class SupabaseAPI extends API {
             return new FailedResult(error.message).toObjectWithMerge({ status: 500 })
         }
     }
-
 
     public async downloadStorageFile(bucketName: string, filePath: string) {
         try {
@@ -129,7 +128,7 @@ export class SupabaseAPI extends API {
         }   
     }
 
-    public async getAuthenticateUserViaEmailAndPassword(email: any, password: any): Promise<any> {
+    public async logInUserViaEmailAndPassword(email: any, password: any): Promise<any> {
         try {
             let client: any = await this.supabaseDatabase.getClient()
             if (!client.isSuccessful) {            

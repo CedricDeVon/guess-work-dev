@@ -3,11 +3,18 @@ import { Button, YStack, Paragraph } from 'tamagui'
 
 import { CommonHeader } from '@/components/CommonHeader'
 import { BrandingTitle } from '@/components/BrandingTitle'
+import { useDisableComponentsDuringNavigation } from '@/hooks/useDisableComponentsDuringNavigation'
+
+import useMainStore from '@/store/mainStore'
 
 export default function NotFoundScreen() {
-    const handleGoBackOnPress = async () => {
+    const mainStore: any = useMainStore()
+
+    const handleGoBackOnPress: Function = async () => {
         router.back()
     }
+
+    useDisableComponentsDuringNavigation()
 
     return (
         <>
