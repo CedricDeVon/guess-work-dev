@@ -43,6 +43,133 @@ export default function SignUp() {
         mainStore.updateAuthSignUpForm({ confirmPassword: value })
     }
 
+    const handleSignUpFormSubmission: Function = async () => {
+        try {
+            mainStore.updateApplicationGlobalsToSubmitting()
+
+            let currentResult: any = await UserNameValidator.singleton.validate(mainStore.authSignUpForm?.username)
+            if (!currentResult.isSuccessful) {
+                // toast.show(currentResult.error, { native: true })
+                mainStore.updateApplicationGlobalsToUnSubmitting()
+                return
+            }
+            currentResult = await EmailValidator.singleton.validate(mainStore.authSignUpForm?.email)
+            if (!currentResult.isSuccessful) {
+                // toast.show(currentResult.error, { native: true })
+                mainStore.updateApplicationGlobalsToUnSubmitting()
+                return
+            }
+            currentResult = await PasswordValidator.singleton.validate(mainStore.authSignUpForm?.password)
+            if (!currentResult.isSuccessful) {
+                // toast.show(currentResult.error, { native: true })
+                mainStore.updateApplicationGlobalsToUnSubmitting()
+                return
+            }
+            currentResult = await ConfirmPasswordValidator.singleton.validate(
+                { password: mainStore.authSignUpForm?.password, confirmPassword: mainStore.authSignUpForm?.confirmPassword }
+            )
+            if (!currentResult.isSuccessful) {
+                // toast.show(currentResult.error, { native: true })
+                mainStore.updateApplicationGlobalsToUnSubmitting()
+                return
+            }
+
+
+            currentResult = await SupabaseAPI.singleton.readOne(
+                'user', { username: mainStore.authSignUpForm?.username },
+                { 'selected-columns': '*' }
+            )
+            if (!currentResult.isSuccessful) {
+                // toast.show('Something\'s Wrong. Please Try Again', { native: true })
+                mainStore.updateApplicationGlobalsToUnSubmitting()
+                return
+            }
+            if (currentResult.data?.length) {
+                // toast.show('Username Already Exists', { native: true })
+                mainStore.updateApplicationGlobalsToUnSubmitting()
+                return
+            }
+            currentResult = await SupabaseAPI.singleton.readOne(
+                'user', { email: mainStore.authSignUpForm?.email },
+                { 'selected-columns': '*' }
+            )
+            if (!currentResult.isSuccessful) {
+                // toast.show('Something\'s Wrong. Please Try Again', { native: true })
+                mainStore.updateApplicationGlobalsToUnSubmitting()
+                return
+            }
+            if (currentResult.data?.length) {
+                // toast.show('Email Already Exists', { native: true })
+                mainStore.updateApplicationGlobalsToUnSubmitting()
+                return
+            }
+
+
+            currentResult = await SupabaseAPI.singleton.createUserViaEmailAndPassword(
+                mainStore.authSignUpForm?.email, mainStore.authSignUpForm?.password)
+            if (!currentResult.isSuccessful) {
+                // toast.show('Something\'s Wrong. Please Try Again', { native: true })
+                mainStore.updateApplicationGlobalsToUnSubmitting()
+                return
+            }
+            const userStateCreateResult: any = await SupabaseAPI.singleton.createOne(
+                'auth-sign-up-user-state',
+                'user_state', {
+                    data: { user_status_type: 'active' }
+                }
+            )
+            if (!userStateCreateResult.isSuccessful) {
+                // toast.show('Something\'s Wrong. Please Try Again', { native: true })
+                mainStore.updateApplicationGlobalsToUnSubmitting()
+                return
+            }
+            const userCreateResult: any = await SupabaseAPI.singleton.createOne(
+                'auth-sign-up-user',
+                'user', {
+                    data: {
+                        username: mainStore.authSignUpForm?.username,
+                        email: mainStore.authSignUpForm?.email,
+                        user_state_id: userStateCreateResult.data[0].id,
+                        metadata: defaultUserMetadata
+                    }
+                }
+            )
+            if (!userCreateResult.isSuccessful) {
+                // toast.show('Something\'s Wrong. Please Try Again', { native: true })
+                mainStore.updateApplicationGlobalsToUnSubmitting()
+                return
+            }
+
+
+            const userGetResult: any = await SupabaseAPI.singleton.readOne(
+                'user', { username: mainStore.authSignUpForm?.username },
+                { 'selected-columns': '*, user_state(*)' }
+            )
+            if (!userGetResult.isSuccessful) {
+                // toast.show('Something\'s Wrong. Please Try Again', { native: true })
+                mainStore.updateApplicationGlobalsToUnSubmitting()
+                return
+            }
+            if (!userGetResult.data?.length) {
+                // toast.show('User Does Not Exist', { native: true })
+                mainStore.updateApplicationGlobalsToUnSubmitting()
+                return
+            }
+
+            // toast.show('Success! Please Wait', { native: true })
+            mainStore.updateUserAccount({ userData: userGetResult.data[0], userPassword: mainStore.authSignUpForm?.password })
+            mainStore.updateApplicationGlobalsToUnSubmitting()
+            mainStore.resetAuthForms()
+
+            router.push('/user/insights')
+
+        } catch (error: any) {
+            // toast.show('Something\'s Wrong. Please Try Again', { native: true })
+            mainStore.updateApplicationGlobalsToUnSubmitting()
+            mainStore.resetAuthForms()
+        }
+    }
+
     return (
         <>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -53,7 +180,6 @@ export default function SignUp() {
 }
 
 /*
-
 import { View, Text } from 'react-native'
 import { router } from 'expo-router'
 import { Button, XStack, YStack, Input, Spinner, Form, Checkbox, Label } from 'tamagui'
