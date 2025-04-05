@@ -33,14 +33,10 @@ export default function Index() {
     }
 
     const handleLogInOnPress: Function = async () => {
-        toast.show('LogIn', { native: true })
-
         router.push('/auth/log-in')
     }
 
     const handleSignUpOnPress: Function = async () => {
-        toast.show('SignUp', { native: true })
-
         router.push('/auth/sign-up')
     }
 

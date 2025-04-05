@@ -27,8 +27,15 @@ export default function RootLayout() {
     })
 
     const [fontsLoaded] = useFonts({
-        Inter: require('@tamagui/font-inter/otf/Inter-Medium.otf'),
+        Inter: require('@tamagui/font-inter/otf/Inter-Regular.otf'),
+        InterBlack: require('@tamagui/font-inter/otf/Inter-Black.otf'),
         InterBold: require('@tamagui/font-inter/otf/Inter-Bold.otf'),
+        InterExtraBold: require('@tamagui/font-inter/otf/Inter-ExtraBold.otf'),
+        InterExtraLight: require('@tamagui/font-inter/otf/Inter-ExtraLight.otf'),
+        InterLight: require('@tamagui/font-inter/otf/Inter-Light.otf'),
+        InterMedium: require('@tamagui/font-inter/otf/Inter-Medium.otf'),
+        InterSemiBold: require('@tamagui/font-inter/otf/Inter-SemiBold.otf'),
+        InterThin: require('@tamagui/font-inter/otf/Inter-Thin.otf'),
     })
 
     useEffect(() => {

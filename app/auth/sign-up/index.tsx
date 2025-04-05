@@ -1,13 +1,13 @@
-import { View } from 'react-native'
+import { View, Text } from 'react-native'
 import { router } from 'expo-router'
+import { Button, XStack, YStack, Input, Spinner, Form, Checkbox, Label } from 'tamagui'
 import { useToastController } from '@tamagui/toast'
-import { Button, XStack, YStack, Input, Spinner, Form, Checkbox, Label, ScrollView } from 'tamagui'
 
-import useMainStore from '@/store/mainStore'
 import { EyeIcon } from '@/components/EyeIcon'
 import { CommonHeader } from '@/components/CommonHeader'
 import { BrandingTitle } from '@/components/BrandingTitle'
 
+import useMainStore from '@/store/mainStore'
 import { SupabaseAPI } from '@/library/apis/supabaseApi'
 import { defaultUserMetadata } from '@/utils/defaultConstants'
 import { EmailValidator } from '@/library/validators/emailValidator'
@@ -32,7 +32,63 @@ export default function SignUp() {
     }
 
     const handleShowPasswordInputOnPress: Function = async () => {
-        mainStore.updateAuthSignUpForm({ showPassword: !mainStore.authSignUpForm?.showPassword })
+        mainStore.updateAuthSignUpForm({ showPassword: !(mainStore.authSignUpForm?.showPassword) })
+    }
+
+    const handlePasswordInputOnChangeText: Function = async (value: any) => {
+        mainStore.updateAuthSignUpForm({ password: value })
+    }
+
+    const handleConfirmPasswordInputOnChangeText: Function = async (value: any) => {
+        mainStore.updateAuthSignUpForm({ confirmPassword: value })
+    }
+
+    return (
+        <>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={{ color: 'red' }}>Hello from SignUp</Text>
+            </View>
+        </>
+    )
+}
+
+/*
+
+import { View, Text } from 'react-native'
+import { router } from 'expo-router'
+import { Button, XStack, YStack, Input, Spinner, Form, Checkbox, Label } from 'tamagui'
+import { useToastController } from '@tamagui/toast'
+
+import { EyeIcon } from '@/components/EyeIcon'
+import { CommonHeader } from '@/components/CommonHeader'
+import { BrandingTitle } from '@/components/BrandingTitle'
+
+import useMainStore from '@/store/mainStore'
+import { SupabaseAPI } from '@/library/apis/supabaseApi'
+import { defaultUserMetadata } from '@/utils/defaultConstants'
+import { EmailValidator } from '@/library/validators/emailValidator'
+import { UserNameValidator } from '@/library/validators/userNameValidator'
+import { PasswordValidator } from '@/library/validators/passwordValidator'
+import { ConfirmPasswordValidator } from '@/library/validators/confirmPasswordValidator'
+
+export default function SignUp() {
+    const mainStore: any = useMainStore()
+    const toast: any = useToastController()
+
+    const handleGoBackOnPress: Function = async () => {
+        router.back()
+    }
+
+    const handleUsernameInputOnChangeText: Function = async (value: any) => {
+        mainStore.updateAuthSignUpForm({ username: value })
+    }
+
+    const handleEmailInputOnChangeText: Function = async (value: any) => {
+        mainStore.updateAuthSignUpForm({ email: value })
+    }
+
+    const handleShowPasswordInputOnPress: Function = async () => {
+        mainStore.updateAuthSignUpForm({ showPassword: !(mainStore.authSignUpForm?.showPassword) })
     }
 
     const handlePasswordInputOnChangeText: Function = async (value: any) => {
@@ -179,7 +235,6 @@ export default function SignUp() {
     )
 }
 
-/*
 <CommonHeader leftEdgeButtonProperties={{ callback: handleGoBackOnPress }}/>
 <YStack flex={1} alignItems='center' justifyContent='center'>
     <ScrollView>
