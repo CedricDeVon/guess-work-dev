@@ -1,9 +1,22 @@
 import { View, Text } from 'react-native'
+import { router } from 'expo-router'
+import { useToastController } from '@tamagui/toast'
+import { Check, Eye, EyeOff } from '@tamagui/lucide-icons'
+import { Button, XStack, YStack, Input, Spinner, Form, Checkbox, Label, ScrollView } from 'tamagui'
+
+import useMainStore from '@/store/mainStore'
+import { EyeIcon } from '@/components/EyeIcon'
+import { CommonHeader } from '@/components/CommonHeader'
+import { BrandingTitle } from '@/components/BrandingTitle'
+
+import { SupabaseAPI } from '@/library/apis/supabaseApi'
+import { EmailValidator } from '@/library/validators/emailValidator'
+import { PasswordValidator } from '@/library/validators/passwordValidator'
 
 export default function LogIn() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Hello from Login</Text>
+      <Text style={{ color: 'red' }}>Hello from Login</Text>
     </View>
   )
 }
@@ -20,10 +33,9 @@ import { EyeIcon } from '@/components/EyeIcon'
 import { CommonHeader } from '@/components/CommonHeader'
 import { BrandingTitle } from '@/components/BrandingTitle'
 
+import { SupabaseAPI } from '@/library/apis/supabaseApi'
 import { EmailValidator } from '@/library/validators/emailValidator'
 import { PasswordValidator } from '@/library/validators/passwordValidator'
-
-import { SupabaseAPI } from '@/library/apis/supabaseApi'
 
 export default function LogIn() {
     const mainStore: any = useMainStore()

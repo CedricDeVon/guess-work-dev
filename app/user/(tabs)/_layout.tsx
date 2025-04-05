@@ -21,7 +21,6 @@ export default function UserTabsLayout() {
             <Tabs
                 screenOptions={{
                     headerShown: false,
-                    animation: 'fade',
                     headerShadowVisible: false,
                     tabBarInactiveTintColor: styles.tabActiveColor(mainStore.currentStyleTheme),
                     tabBarStyle: { elevation: 0, borderTopWidth: 0, backgroundColor: styles.tabInactiveColor(mainStore.currentStyleTheme),

@@ -20,7 +20,7 @@ import('@/app/auth/sign-up')
 
 export default function Index() {
     const mainStore: any = useMainStore()
-    const toast: any = useToastController()
+    const toast: any = useToastController()    
 
     const handlePlayOnPress: Function = async () => {
         mainStore.updateApplicationGlobalsToSubmitting()
@@ -33,10 +33,14 @@ export default function Index() {
     }
 
     const handleLogInOnPress: Function = async () => {
+        toast.show('LogIn', { native: true })
+
         router.push('/auth/log-in')
     }
 
     const handleSignUpOnPress: Function = async () => {
+        toast.show('SignUp', { native: true })
+
         router.push('/auth/sign-up')
     }
 

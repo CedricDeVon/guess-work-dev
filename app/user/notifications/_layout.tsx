@@ -10,7 +10,7 @@ export default function UserNotificationsLayout() {
     
     return (
         <>
-            <Stack screenOptions={{ headerShown: false, animation: 'fade' }}>
+            <Stack screenOptions={{ headerShown: false }}>
                 <Stack.Screen name='index' options={{ headerShown: false, animation: 'fade' }} />
             </Stack>
         </>
