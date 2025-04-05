@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import { router } from 'expo-router'
 import { Button, XStack, YStack, Input, Spinner, Form, Checkbox, Label } from 'tamagui'
 

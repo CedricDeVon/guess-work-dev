@@ -1,11 +1,11 @@
 import '@/assets/styles/global.css'
 
 import { useEffect } from 'react'
-import { View, BackHandler } from 'react-native'
 import { Stack } from 'expo-router'
 import { useFonts } from 'expo-font'
 import { TamaguiProvider } from 'tamagui'
 import { PortalProvider } from '@tamagui/portal'
+import { View, BackHandler } from 'react-native'
 import * as SplashScreen from 'expo-splash-screen'
 import { ToastProvider, ToastViewport } from '@tamagui/toast'
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'

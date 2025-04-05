@@ -1,11 +1,11 @@
-import { supabase } from '@/utils/supabase'
+import { supabase } from '../../utils/supabase'
 
 import { Database } from './database'
 import { Result } from '../results/result'
 import { FailedResult } from '../results/failedResult'
 import { SuccessfulResult } from '../results/successfulResult'
-import { EnvironmentConfiguration } from '@/library/configurations/environmentConfiguration'
-import { Method2CipherCryptographer } from '@/library/cryptographers/method2CipherCryptographer'
+import { EnvironmentConfiguration } from '../configurations/environmentConfiguration'
+import { Method2CipherCryptographer } from '../cryptographers/method2CipherCryptographer'
 
 export class SupabaseDatabase extends Database {
     public static readonly singleton: SupabaseDatabase = new SupabaseDatabase()

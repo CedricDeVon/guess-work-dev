@@ -31,7 +31,23 @@ export default function LogIn() {
     }
 
     const handleLogInFormSubmission: Function = async () => {
-        
+        try {
+            mainStore.updateApplicationGlobalsToSubmitting()
+
+            if (!(mainStore.authLogInForm?.email) || !(mainStore.authLogInForm?.password)) {
+                mainStore.updateApplicationGlobalsToUnSubmitting()
+                return
+            }
+
+            mainStore.updateApplicationGlobalsToUnSubmitting()
+            mainStore.resetAuthForms()
+
+            router.push('/user/insights')
+
+        } catch (error: any) {
+            mainStore.updateApplicationGlobalsToUnSubmitting()
+            mainStore.resetAuthForms()
+        }
     }
 
     return (
@@ -44,51 +60,75 @@ export default function LogIn() {
 }
 
 /*
+
+const userGetResult: any = await SupabaseAPI.singleton.readOne(
+    'user',
+    { email: mainStore.authLogInForm?.email },
+    { 'selected-columns': '*, user_state(*)' }
+)
+if (!userGetResult.isSuccessful) {
+    mainStore.updateApplicationGlobalsToUnSubmitting()
+    return
+}
+if (!userGetResult.data?.length) {
+    mainStore.updateApplicationGlobalsToUnSubmitting()
+    return
+}
+const userAuthResult: any = await SupabaseAPI.singleton.logInUserViaEmailAndPassword(
+    userGetResult.data[0].email, mainStore.authLogInForm?.password
+)
+if (!userAuthResult.isSuccessful) {
+    mainStore.updateApplicationGlobalsToUnSubmitting()
+    return
+}
+mainStore.updateUserAccount({ userData: userGetResult.data[0], userPassword: mainStore.authLogInForm?.password })
+
+
 try {
-            mainStore.updateApplicationGlobalsToSubmitting()
+    mainStore.updateApplicationGlobalsToSubmitting()
 
-            if (!(mainStore.authLogInForm?.email) || !(mainStore.authLogInForm?.password)) {
-                // toast.show('Please Input Your email And Password', { native: true })
-                mainStore.updateApplicationGlobalsToUnSubmitting()
-                return
-            }
+    if (!(mainStore.authLogInForm?.email) || !(mainStore.authLogInForm?.password)) {
+        // toast.show('Please Input Your email And Password', { native: true })
+        mainStore.updateApplicationGlobalsToUnSubmitting()
+        return
+    }
 
-            const userGetResult: any = await SupabaseAPI.singleton.readOne(
-                'user',
-                { email: mainStore.authLogInForm?.email },
-                { 'selected-columns': '*, user_state(*)' }
-            )
-            if (!userGetResult.isSuccessful) {
-                // toast.show('Something\'s Wrong. Please Try Again', { native: true })
-                mainStore.updateApplicationGlobalsToUnSubmitting()
-                return
-            }
-            if (!userGetResult.data?.length) {
-                // toast.show('User Does Not Exist', { native: true })
-                mainStore.updateApplicationGlobalsToUnSubmitting()
-                return
-            }
-            const userAuthResult: any = await SupabaseAPI.singleton.logInUserViaEmailAndPassword(
-                userGetResult.data[0].email, mainStore.authLogInForm?.password
-            )
-            if (!userAuthResult.isSuccessful) {
-                // toast.show('Invalid Password. Please Try Again', { native: true })
-                mainStore.updateApplicationGlobalsToUnSubmitting()
-                return
-            }
+    const userGetResult: any = await SupabaseAPI.singleton.readOne(
+        'user',
+        { email: mainStore.authLogInForm?.email },
+        { 'selected-columns': '*, user_state(*)' }
+    )
+    if (!userGetResult.isSuccessful) {
+        // toast.show('Something\'s Wrong. Please Try Again', { native: true })
+        mainStore.updateApplicationGlobalsToUnSubmitting()
+        return
+    }
+    if (!userGetResult.data?.length) {
+        // toast.show('User Does Not Exist', { native: true })
+        mainStore.updateApplicationGlobalsToUnSubmitting()
+        return
+    }
+    const userAuthResult: any = await SupabaseAPI.singleton.logInUserViaEmailAndPassword(
+        userGetResult.data[0].email, mainStore.authLogInForm?.password
+    )
+    if (!userAuthResult.isSuccessful) {
+        // toast.show('Invalid Password. Please Try Again', { native: true })
+        mainStore.updateApplicationGlobalsToUnSubmitting()
+        return
+    }
 
-            // toast.show('Success! Please Wait', { native: true })
-            mainStore.updateUserAccount({ userData: userGetResult.data[0], userPassword: mainStore.authLogInForm?.password })
-            mainStore.updateApplicationGlobalsToUnSubmitting()
-            mainStore.resetAuthForms()
+    // toast.show('Success! Please Wait', { native: true })
+    mainStore.updateUserAccount({ userData: userGetResult.data[0], userPassword: mainStore.authLogInForm?.password })
+    mainStore.updateApplicationGlobalsToUnSubmitting()
+    mainStore.resetAuthForms()
 
-            router.push('/user/insights')
+    router.push('/user/insights')
 
-        } catch (error: any) {
-            // toast.show('Something\'s Wrong. Please Try Again', { native: true })
-            mainStore.updateApplicationGlobalsToUnSubmitting()
-            mainStore.resetAuthForms()
-        }
+} catch (error: any) {
+    // toast.show('Something\'s Wrong. Please Try Again', { native: true })
+    mainStore.updateApplicationGlobalsToUnSubmitting()
+    mainStore.resetAuthForms()
+}
 
 import { View } from 'react-native'
 import { router } from 'expo-router'
