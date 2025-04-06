@@ -4,8 +4,6 @@ import { Database } from './database'
 import { Result } from '../results/result'
 import { FailedResult } from '../results/failedResult'
 import { SuccessfulResult } from '../results/successfulResult'
-import { EnvironmentConfiguration } from '../configurations/environmentConfiguration'
-import { Method2CipherCryptographer } from '../cryptographers/method2CipherCryptographer'
 
 export class SupabaseDatabase extends Database {
     public static readonly singleton: SupabaseDatabase = new SupabaseDatabase()
@@ -43,7 +41,7 @@ export class SupabaseDatabase extends Database {
             SupabaseDatabase._throwIfUndefinedOrNull(tableName)
 
             supabaseClient = supabaseClient
-                .schema(Method2CipherCryptographer.singleton.decrypt(EnvironmentConfiguration.singleton.getRawValue('EXPO_PUBLIC_SUPABASE_BASE_SCHEMA_NAME').data).data)
+                .schema(process.env.EXPO_PUBLIC_SUPABASE_BASE_SCHEMA_NAME)
                 .from(tableName)
                 
             return new SuccessfulResult(supabaseClient)

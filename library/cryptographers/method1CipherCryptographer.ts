@@ -2,7 +2,6 @@ import { Result } from '../results/result'
 import { Cryptographer } from './cryptographer'
 import { FailedResult } from '../results/failedResult'
 import { Layer1CipherCryptographer } from './layer1CipherCryptographer'
-import { EnvironmentConfiguration } from '../configurations/environmentConfiguration'
 
 export class Method1CipherCryptographer extends Cryptographer {
     public static readonly singleton: Method1CipherCryptographer = new Method1CipherCryptographer()

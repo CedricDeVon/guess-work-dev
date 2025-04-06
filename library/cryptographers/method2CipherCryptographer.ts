@@ -3,7 +3,6 @@ import { Cryptographer } from './cryptographer'
 import { FailedResult } from '../results/failedResult'
 import { Layer2CipherCryptographer } from './layer2CipherCryptographer'
 import { Method1CipherCryptographer } from './method1CipherCryptographer'
-import { EnvironmentConfiguration } from '../configurations/environmentConfiguration'
 
 export class Method2CipherCryptographer extends Cryptographer {
     public static readonly singleton: Method2CipherCryptographer = new Method2CipherCryptographer()
@@ -19,8 +18,7 @@ export class Method2CipherCryptographer extends Cryptographer {
     public encrypt(data: any): Result {
         try {
             const result: any = Layer2CipherCryptographer.singleton.encrypt(data,
-                Method1CipherCryptographer.singleton.decrypt(EnvironmentConfiguration.singleton.getRawValue(Method2CipherCryptographer._keyEnvName).data).data,
-                Method1CipherCryptographer.singleton.decrypt(EnvironmentConfiguration.singleton.getRawValue(Method2CipherCryptographer._nonceEnvName).data).data)
+                process.env.EXPO_PUBLIC_CRYPTOGRAPHY_KEY_1, process.env.EXPO_PUBLIC_CRYPTOGRAPHY_NONCE_1)
             return result
             
         } catch (error: any) {
@@ -31,8 +29,7 @@ export class Method2CipherCryptographer extends Cryptographer {
     public decrypt(data: any): Result {
         try {
             const result: any = Layer2CipherCryptographer.singleton.decrypt(data,
-                Method1CipherCryptographer.singleton.decrypt(EnvironmentConfiguration.singleton.getRawValue(Method2CipherCryptographer._keyEnvName).data).data,
-                Method1CipherCryptographer.singleton.decrypt(EnvironmentConfiguration.singleton.getRawValue(Method2CipherCryptographer._nonceEnvName).data).data)
+                process.env.EXPO_PUBLIC_CRYPTOGRAPHY_KEY_1, process.env.EXPO_PUBLIC_CRYPTOGRAPHY_NONCE_1)
             return result
             
         } catch (error: any) {

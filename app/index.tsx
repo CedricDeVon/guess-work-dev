@@ -11,7 +11,6 @@ import { usePreventBackPress } from '@/hooks/usePreventBackPress'
 import { useDisableComponentsDuringNavigation } from '@/hooks/useDisableComponentsDuringNavigation'
 
 import useMainStore from '@/store/mainStore'
-import { EnvironmentConfiguration } from '../library/configurations/environmentConfiguration'
 import { Method2CipherCryptographer } from '../library/cryptographers/method2CipherCryptographer'
 
 /*
@@ -23,7 +22,9 @@ import('@/app/auth/sign-up')
 export default function Index() {
     const mainStore: any = useMainStore()
     const toast: any = useToastController()
-    const data: any = Method2CipherCryptographer.singleton.decrypt(EnvironmentConfiguration.singleton.getRawValue('EXPO_PUBLIC_SUPABASE_BASE_SCHEMA_NAME').data).data    
+    const data: any = process.env.EXPO_PUBLIC_SUPABASE_BASE_SCHEMA_NAME
+    const data1: any = Method2CipherCryptographer.singleton.encrypt(data).data
+    const data2: any = Method2CipherCryptographer.singleton.decrypt(data1).data
 
     const handlePlayOnPress: Function = async () => {
         mainStore.updateApplicationGlobalsToSubmitting()
@@ -65,9 +66,9 @@ export default function Index() {
                         <Button disabled={mainStore.applicationGlobals?.isDisabled} onPress={handleLogInOnPress}>
                             Log In
                         </Button>
-                        <Paragraph>
-                            {data}
-                        </Paragraph>
+                        <Paragraph>{data}</Paragraph>
+                        <Paragraph>{data1}</Paragraph>
+                        <Paragraph>{data2}</Paragraph>
                         <Button disabled={mainStore.applicationGlobals?.isDisabled} onPress={handleSignUpOnPress}>
                             Sign Up
                         </Button>
