@@ -47,32 +47,60 @@ export default function SignUp() {
 
     return (
         <>
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={{ color: 'red' }}>Hello from SignUp</Text>
-            </View>
+            <CommonHeader leftEdgeButtonProperties={{ callback: handleGoBackOnPress }}/>
+            <YStack flex={1} alignItems='center' justifyContent='center'>
+                <ScrollView>
+                    <View height='20%'></View>
+                    <Form onSubmit={handleSignUpFormSubmission}>
+                        <YStack gap='$5' alignItems='center' justifyContent='center'>
+                            <BrandingTitle/>
+                            <YStack width={300} gap='$3'>
+                                <Input value={mainStore.authSignUpForm?.username} disabled={mainStore.applicationGlobals?.isDisabled} onChangeText={handleUsernameInputOnChangeText} maxLength={UserNameValidator.maxLength} placeholder='Username' size='$4' borderWidth={1}/>
+                                <Input value={mainStore.authSignUpForm?.email} disabled={mainStore.applicationGlobals?.isDisabled} onChangeText={handleEmailInputOnChangeText} maxLength={EmailValidator.maxLength} placeholder='Email' size='$4' borderWidth={1}/>
+                                <View></View>
+                                <XStack gap='$3'>
+                                    <Input value={mainStore.authSignUpForm?.password} disabled={mainStore.applicationGlobals?.isDisabled} secureTextEntry={!mainStore.authSignUpForm?.showPassword} onChangeText={handlePasswordInputOnChangeText} maxLength={PasswordValidator.maxLength} placeholder='Password' size='$4' borderWidth={1} width='76%'/>
+                                    <Button disabled={mainStore.applicationGlobals?.isDisabled} onPress={handleShowPasswordInputOnPress} backgroundColor='transparent' icon={<EyeIcon isOn={mainStore.authSignUpForm?.showPassword}/>}></Button>
+                                </XStack>
+                                <Input value={mainStore.authSignUpForm?.confirmPassword} disabled={mainStore.applicationGlobals?.isDisabled} secureTextEntry={!mainStore.authSignUpForm?.showPassword} onChangeText={handleConfirmPasswordInputOnChangeText} maxLength={PasswordValidator.maxLength} placeholder='Confirm Password' size='$4' borderWidth={1}/>
+                                <View></View>
+                                <Form.Trigger asChild disabled={mainStore.applicationGlobals?.isDisabled}>
+                                    <Button disabled={mainStore.applicationGlobals?.isDisabled} borderWidth='$0' color='$white2' backgroundColor='$blue9' pressStyle={{ backgroundColor: '$blue8' }} icon={(mainStore.applicationGlobals?.isSubmitting) ? () => <Spinner color='$white2'/> : undefined}>
+                                        Sign Up
+                                    </Button>
+                                </Form.Trigger>
+                            </YStack>
+                        </YStack>
+                    </Form>
+                </ScrollView>
+            </YStack>
         </>
     )
 }
 
 /*
+
+<>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text style={{ color: 'red' }}>Hello from SignUp</Text>
+    </View>
+</>
+
         try {
             mainStore.updateApplicationGlobalsToSubmitting()
 
             let currentResult: any = await UserNameValidator.singleton.validate(mainStore.authSignUpForm?.username)
             if (!currentResult.isSuccessful) {
-                // toast.show(currentResult.error, { native: true })
                 mainStore.updateApplicationGlobalsToUnSubmitting()
                 return
             }
             currentResult = await EmailValidator.singleton.validate(mainStore.authSignUpForm?.email)
             if (!currentResult.isSuccessful) {
-                // toast.show(currentResult.error, { native: true })
                 mainStore.updateApplicationGlobalsToUnSubmitting()
                 return
             }
             currentResult = await PasswordValidator.singleton.validate(mainStore.authSignUpForm?.password)
             if (!currentResult.isSuccessful) {
-                // toast.show(currentResult.error, { native: true })
                 mainStore.updateApplicationGlobalsToUnSubmitting()
                 return
             }
@@ -80,7 +108,6 @@ export default function SignUp() {
                 { password: mainStore.authSignUpForm?.password, confirmPassword: mainStore.authSignUpForm?.confirmPassword }
             )
             if (!currentResult.isSuccessful) {
-                // toast.show(currentResult.error, { native: true })
                 mainStore.updateApplicationGlobalsToUnSubmitting()
                 return
             }
@@ -91,12 +118,10 @@ export default function SignUp() {
                 { 'selected-columns': '*' }
             )
             if (!currentResult.isSuccessful) {
-                // toast.show('Something\'s Wrong. Please Try Again', { native: true })
                 mainStore.updateApplicationGlobalsToUnSubmitting()
                 return
             }
             if (currentResult.data?.length) {
-                // toast.show('Username Already Exists', { native: true })
                 mainStore.updateApplicationGlobalsToUnSubmitting()
                 return
             }
@@ -105,12 +130,10 @@ export default function SignUp() {
                 { 'selected-columns': '*' }
             )
             if (!currentResult.isSuccessful) {
-                // toast.show('Something\'s Wrong. Please Try Again', { native: true })
                 mainStore.updateApplicationGlobalsToUnSubmitting()
                 return
             }
             if (currentResult.data?.length) {
-                // toast.show('Email Already Exists', { native: true })
                 mainStore.updateApplicationGlobalsToUnSubmitting()
                 return
             }
@@ -119,7 +142,6 @@ export default function SignUp() {
             currentResult = await SupabaseAPI.singleton.createUserViaEmailAndPassword(
                 mainStore.authSignUpForm?.email, mainStore.authSignUpForm?.password)
             if (!currentResult.isSuccessful) {
-                // toast.show('Something\'s Wrong. Please Try Again', { native: true })
                 mainStore.updateApplicationGlobalsToUnSubmitting()
                 return
             }
@@ -130,7 +152,6 @@ export default function SignUp() {
                 }
             )
             if (!userStateCreateResult.isSuccessful) {
-                // toast.show('Something\'s Wrong. Please Try Again', { native: true })
                 mainStore.updateApplicationGlobalsToUnSubmitting()
                 return
             }
@@ -146,7 +167,6 @@ export default function SignUp() {
                 }
             )
             if (!userCreateResult.isSuccessful) {
-                // toast.show('Something\'s Wrong. Please Try Again', { native: true })
                 mainStore.updateApplicationGlobalsToUnSubmitting()
                 return
             }
@@ -157,17 +177,14 @@ export default function SignUp() {
                 { 'selected-columns': '*, user_state(*)' }
             )
             if (!userGetResult.isSuccessful) {
-                // toast.show('Something\'s Wrong. Please Try Again', { native: true })
                 mainStore.updateApplicationGlobalsToUnSubmitting()
                 return
             }
             if (!userGetResult.data?.length) {
-                // toast.show('User Does Not Exist', { native: true })
                 mainStore.updateApplicationGlobalsToUnSubmitting()
                 return
             }
 
-            // toast.show('Success! Please Wait', { native: true })
             mainStore.updateUserAccount({ userData: userGetResult.data[0], userPassword: mainStore.authSignUpForm?.password })
             mainStore.updateApplicationGlobalsToUnSubmitting()
             mainStore.resetAuthForms()
@@ -175,7 +192,6 @@ export default function SignUp() {
             router.push('/user/insights')
 
         } catch (error: any) {
-            // toast.show('Something\'s Wrong. Please Try Again', { native: true })
             mainStore.updateApplicationGlobalsToUnSubmitting()
             mainStore.resetAuthForms()
         }
@@ -354,38 +370,36 @@ export default function SignUp() {
 
     return (
         <>
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text style={{ color: 'red' }}>Hello from SignUp</Text>
-            </View>
+            <CommonHeader leftEdgeButtonProperties={{ callback: handleGoBackOnPress }}/>
+            <YStack flex={1} alignItems='center' justifyContent='center'>
+                <ScrollView>
+                    <View height='20%'></View>
+                    <Form onSubmit={handleSignUpFormSubmission}>
+                        <YStack gap='$5' alignItems='center' justifyContent='center'>
+                            <BrandingTitle/>
+                            <YStack width={300} gap='$3'>
+                                <Input value={mainStore.authSignUpForm?.username} disabled={mainStore.applicationGlobals?.isDisabled} onChangeText={handleUsernameInputOnChangeText} maxLength={UserNameValidator.maxLength} placeholder='Username' size='$4' borderWidth={1}/>
+                                <Input value={mainStore.authSignUpForm?.email} disabled={mainStore.applicationGlobals?.isDisabled} onChangeText={handleEmailInputOnChangeText} maxLength={EmailValidator.maxLength} placeholder='Email' size='$4' borderWidth={1}/>
+                                <View></View>
+                                <XStack gap='$3'>
+                                    <Input value={mainStore.authSignUpForm?.password} disabled={mainStore.applicationGlobals?.isDisabled} secureTextEntry={!mainStore.authSignUpForm?.showPassword} onChangeText={handlePasswordInputOnChangeText} maxLength={PasswordValidator.maxLength} placeholder='Password' size='$4' borderWidth={1} width='76%'/>
+                                    <Button disabled={mainStore.applicationGlobals?.isDisabled} onPress={handleShowPasswordInputOnPress} backgroundColor='transparent' icon={<EyeIcon isOn={mainStore.authSignUpForm?.showPassword}/>}></Button>
+                                </XStack>
+                                <Input value={mainStore.authSignUpForm?.confirmPassword} disabled={mainStore.applicationGlobals?.isDisabled} secureTextEntry={!mainStore.authSignUpForm?.showPassword} onChangeText={handleConfirmPasswordInputOnChangeText} maxLength={PasswordValidator.maxLength} placeholder='Confirm Password' size='$4' borderWidth={1}/>
+                                <View></View>
+                                <Form.Trigger asChild disabled={mainStore.applicationGlobals?.isDisabled}>
+                                    <Button disabled={mainStore.applicationGlobals?.isDisabled} borderWidth='$0' color='$white2' backgroundColor='$blue9' pressStyle={{ backgroundColor: '$blue8' }} icon={(mainStore.applicationGlobals?.isSubmitting) ? () => <Spinner color='$white2'/> : undefined}>
+                                        Sign Up
+                                    </Button>
+                                </Form.Trigger>
+                            </YStack>
+                        </YStack>
+                    </Form>
+                </ScrollView>
+            </YStack>
         </>
     )
 }
 
-<CommonHeader leftEdgeButtonProperties={{ callback: handleGoBackOnPress }}/>
-<YStack flex={1} alignItems='center' justifyContent='center'>
-    <ScrollView>
-        <View height='20%'></View>
-        <Form onSubmit={handleSignUpFormSubmission}>
-            <YStack gap='$5' alignItems='center' justifyContent='center'>
-                <BrandingTitle/>
-                <YStack width={300} gap='$3'>
-                    <Input value={mainStore.authSignUpForm?.username} disabled={mainStore.applicationGlobals?.isDisabled} onChangeText={handleUsernameInputOnChangeText} maxLength={UserNameValidator.maxLength} placeholder='Username' size='$4' borderWidth={1}/>
-                    <Input value={mainStore.authSignUpForm?.email} disabled={mainStore.applicationGlobals?.isDisabled} onChangeText={handleEmailInputOnChangeText} maxLength={EmailValidator.maxLength} placeholder='Email' size='$4' borderWidth={1}/>
-                    <View></View>
-                    <XStack gap='$3'>
-                        <Input value={mainStore.authSignUpForm?.password} disabled={mainStore.applicationGlobals?.isDisabled} secureTextEntry={!mainStore.authSignUpForm?.showPassword} onChangeText={handlePasswordInputOnChangeText} maxLength={PasswordValidator.maxLength} placeholder='Password' size='$4' borderWidth={1} width='76%'/>
-                        <Button disabled={mainStore.applicationGlobals?.isDisabled} onPress={handleShowPasswordInputOnPress} backgroundColor='transparent' icon={<EyeIcon isOn={mainStore.authSignUpForm?.showPassword}/>}></Button>
-                    </XStack>
-                    <Input value={mainStore.authSignUpForm?.confirmPassword} disabled={mainStore.applicationGlobals?.isDisabled} secureTextEntry={!mainStore.authSignUpForm?.showPassword} onChangeText={handleConfirmPasswordInputOnChangeText} maxLength={PasswordValidator.maxLength} placeholder='Confirm Password' size='$4' borderWidth={1}/>
-                    <View></View>
-                    <Form.Trigger asChild disabled={mainStore.applicationGlobals?.isDisabled}>
-                        <Button disabled={mainStore.applicationGlobals?.isDisabled} borderWidth='$0' color='$white2' backgroundColor='$blue9' pressStyle={{ backgroundColor: '$blue8' }} icon={(mainStore.applicationGlobals?.isSubmitting) ? () => <Spinner color='$white2'/> : undefined}>
-                            Sign Up
-                        </Button>
-                    </Form.Trigger>
-                </YStack>
-            </YStack>
-        </Form>
-    </ScrollView>
-</YStack>
+
 */

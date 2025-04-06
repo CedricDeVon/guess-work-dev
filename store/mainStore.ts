@@ -2,8 +2,8 @@ import { create } from 'zustand'
 import Constants from 'expo-constants'
 import Storage from 'expo-sqlite/kv-store'
 
-import { defaultConstants } from '@/utils/defaultConstants'
-import { Method2CipherCryptographer } from '@/library/cryptographers/method2CipherCryptographer'
+import { defaultConstants } from '../utils/defaultConstants'
+import { Method2CipherCryptographer } from '../library/cryptographers/method2CipherCryptographer'
 
 const useMainStore = create((set: any) => ({
     userAccount: JSON.parse(Storage.getItemSync('knight-vision_user-account') || JSON.stringify('')) || '',

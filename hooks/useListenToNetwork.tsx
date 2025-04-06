@@ -8,7 +8,7 @@ export function useListenToNetwork() {
 
     useEffect(() => {
         const unsubscribe: any = NetInfo.addEventListener((state: any) => {
-            console.log(state)
+            // console.log(state)
             mainStore.updateNetworkState(state)
         })
         

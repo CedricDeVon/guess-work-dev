@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import { router } from 'expo-router'
 import { Button, XStack, YStack, Input, Spinner, Form, Checkbox, Label } from 'tamagui'
 
@@ -39,6 +39,28 @@ export default function LogIn() {
                 return
             }
 
+            const userGetResult: any = await SupabaseAPI.singleton.readOne( // (SupabaseAPI) CULPRIT
+                'user',
+                { email: mainStore.authLogInForm?.email },
+                { 'selected-columns': '*, user_state(*)' }
+            )
+            if (!userGetResult.isSuccessful) {
+                mainStore.updateApplicationGlobalsToUnSubmitting()
+                return
+            }
+            if (!userGetResult.data?.length) {
+                mainStore.updateApplicationGlobalsToUnSubmitting()
+                return
+            }
+            const userAuthResult: any = await SupabaseAPI.singleton.logInUserViaEmailAndPassword(
+                userGetResult.data[0].email, mainStore.authLogInForm?.password
+            )
+            if (!userAuthResult.isSuccessful) {
+                mainStore.updateApplicationGlobalsToUnSubmitting()
+                return
+            }
+
+            mainStore.updateUserAccount({ userData: userGetResult.data[0], userPassword: mainStore.authLogInForm?.password })
             mainStore.updateApplicationGlobalsToUnSubmitting()
             mainStore.resetAuthForms()
 
@@ -61,27 +83,6 @@ export default function LogIn() {
 
 /*
 
-const userGetResult: any = await SupabaseAPI.singleton.readOne(
-    'user',
-    { email: mainStore.authLogInForm?.email },
-    { 'selected-columns': '*, user_state(*)' }
-)
-if (!userGetResult.isSuccessful) {
-    mainStore.updateApplicationGlobalsToUnSubmitting()
-    return
-}
-if (!userGetResult.data?.length) {
-    mainStore.updateApplicationGlobalsToUnSubmitting()
-    return
-}
-const userAuthResult: any = await SupabaseAPI.singleton.logInUserViaEmailAndPassword(
-    userGetResult.data[0].email, mainStore.authLogInForm?.password
-)
-if (!userAuthResult.isSuccessful) {
-    mainStore.updateApplicationGlobalsToUnSubmitting()
-    return
-}
-mainStore.updateUserAccount({ userData: userGetResult.data[0], userPassword: mainStore.authLogInForm?.password })
 
 
 try {
