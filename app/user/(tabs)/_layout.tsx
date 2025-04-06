@@ -25,8 +25,7 @@ export default function UserTabsLayout() {
                     tabBarInactiveTintColor: styles.tabActiveColor(mainStore.currentStyleTheme),
                     tabBarStyle: { elevation: 0, borderTopWidth: 0, backgroundColor: styles.tabInactiveColor(mainStore.currentStyleTheme),
                     height: 60
-                }}
-            }>
+                }}}>
                 <Tabs.Screen name='training' options={{ tabBarIcon: ({ color, focused }) => (<BookOpen color={(focused) ? '$blue9' : styles.tabActiveColor(mainStore.currentStyleTheme)} size='$1' />), title: 'Training', headerShown: false, animation: 'fade' }} />
                 <Tabs.Screen name='play' options={{ tabBarIcon: ({ color, focused }) => (<Swords color={(focused) ? '$blue9' : styles.tabActiveColor(mainStore.currentStyleTheme)} size='$1' />), title: 'Play', headerShown: false, animation: 'fade' }} />
                 <Tabs.Screen name='insights' options={{ tabBarIcon: ({ color, focused }) => (<ChartColumnIncreasing color={(focused) ? '$blue9' : styles.tabActiveColor(mainStore.currentStyleTheme)} size='$1' />), title: 'Insights', headerShown: false, animation: 'fade' }} />

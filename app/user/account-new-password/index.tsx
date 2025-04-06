@@ -1,8 +1,8 @@
 import { router } from 'expo-router'
 import { ScrollView } from 'react-native'
-import { useToastController } from '@tamagui/toast'
 import { LockKeyhole } from '@tamagui/lucide-icons'
 import { Button, XStack, YStack, Input, Spinner, H6, Paragraph } from 'tamagui'
+import { useToastController } from '@tamagui/toast'
 
 import styles from '@/assets/styles/global'
 import useMainStore from '@/store/mainStore'
@@ -81,7 +81,7 @@ export default function UserAccountNewPassword() {
             router.push('/')
 
         } catch (error: any) {
-            console.log(error)
+            // console.log(error)
             toast.show('Something\'s Wrong. Please Try Again', { native: true })
             mainStore.updateApplicationGlobalsToUnSubmitting()
             mainStore.resetAccountNewPasswordForm()

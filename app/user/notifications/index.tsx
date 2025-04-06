@@ -2,11 +2,11 @@ import { useEffect } from 'react'
 import { ScrollView } from 'react-native'
 import { router, Link } from 'expo-router'
 import { Form, View, Input, Spinner, Button, Separator, Switch, Label, XStack, YStack, Paragraph, H6 } from 'tamagui'
-import { useToastController } from '@tamagui/toast'
 import { Menu, CircleUserRound, LockKeyhole, BellRing, Trophy, Palette, Info } from '@tamagui/lucide-icons'
+import { useToastController } from '@tamagui/toast'
+import * as ImagePicker from 'expo-image-picker'
 import { Picker } from '@react-native-picker/picker'
-import DateTimePicker from "@react-native-community/datetimepicker";
-import * as ImagePicker from 'expo-image-picker';
+import DateTimePicker from '@react-native-community/datetimepicker'
 
 import useMainStore from '@/store/mainStore'
 import { CommonHeader } from '@/components/CommonHeader'
@@ -60,7 +60,7 @@ export default function UserNotifications() {
             mainStore.updateNotificationsForm({ isSubmitting: false, isDisabled: false })
 
         } catch (error: any) {
-            console.log(error)
+            // console.log(error)
             toast.show('Unexpected Behavior Detected', { native: true })
             mainStore.updateNotificationsForm({ isSubmitting: false, isDisabled: false })
         }
@@ -99,13 +99,13 @@ export default function UserNotifications() {
                         <YStack gap='$3'>
                             <Paragraph>Content</Paragraph>
                             <Input value={mainStore.notificationsForm?.contentTitle} disabled={mainStore.notificationsForm?.isDisabled} onChangeText={handleContentTitleOnChangeText} placeholder='Title' keyboardType='text' size='$4' borderWidth={1} maxLength={100}/>
-                            <Input value={mainStore.notificationsForm?.contentMessage} disabled={mainStore.notificationsForm?.isDisabled} onChangeText={handleContentMessageOnChangeText} placeholder='Message' multiline textAlignVertical="top" numberOfLines={5} keyboardType='text' size='$4' borderWidth={1} maxLength={100}/>
+                            <Input value={mainStore.notificationsForm?.contentMessage} disabled={mainStore.notificationsForm?.isDisabled} onChangeText={handleContentMessageOnChangeText} placeholder='Message' multiline textAlignVertical='top' numberOfLines={5} keyboardType='text' size='$4' borderWidth={1} maxLength={100}/>
                         </YStack>
                         <YStack gap='$3'>
                             <XStack justifyContent='space-between' alignItems='center'>
                                 <Label>Is Disabled</Label>
-                                <Switch checked={mainStore.notificationsForm?.isNotificationDisabled} disabled={mainStore.notificationsForm?.isDisabled} onCheckedChange={handleIsDisabledOnCheckedChange} size="$3">
-                                    <Switch.Thumb animation="bouncy"/>
+                                <Switch checked={mainStore.notificationsForm?.isNotificationDisabled} disabled={mainStore.notificationsForm?.isDisabled} onCheckedChange={handleIsDisabledOnCheckedChange} size='$3'>
+                                    <Switch.Thumb animation='bouncy'/>
                                 </Switch>
                             </XStack>
                         </YStack>

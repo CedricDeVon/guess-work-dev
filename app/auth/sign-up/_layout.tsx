@@ -2,10 +2,8 @@ import { Stack } from 'expo-router'
 
 import { useDisableComponentsDuringNavigation } from '@/hooks/useDisableComponentsDuringNavigation'
 
-/*
 import('@/app/')
 import('@/app/+not-found')
-*/
 
 export default function SignUpLayout() {
     useDisableComponentsDuringNavigation()

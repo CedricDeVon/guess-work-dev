@@ -1,5 +1,5 @@
 import { router } from 'expo-router'
-import { Button, YStack, Paragraph } from 'tamagui'
+import { Button, YStack, Paragraph, View } from 'tamagui'
 
 import { CommonHeader } from '@/components/CommonHeader'
 import { BrandingTitle } from '@/components/BrandingTitle'
@@ -24,7 +24,7 @@ export default function NotFoundScreen() {
                     <YStack gap='$3'>
                         <BrandingTitle textLabel='Dead End!'/>
                         <YStack width={250}>
-                            <Paragraph textAlign='center'>What you seek may not yet exist, our appologies.</Paragraph>
+                            <Paragraph textAlign='center'>What you're looking for may not yet exist. Our appologies.</Paragraph>
                         </YStack>
                     </YStack>
                     <YStack width={200}>
@@ -33,6 +33,7 @@ export default function NotFoundScreen() {
                         </Button>
                     </YStack>
                 </YStack>
+                <View height='100'></View>
             </YStack>
         </>
     )

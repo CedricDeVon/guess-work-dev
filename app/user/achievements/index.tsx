@@ -35,7 +35,7 @@ export default function UserAchievements() {
             mainStore.resetAchievementsResetProgressForm()
 
         } catch (error: any) {
-            console.log(error)
+            // console.log(error)
             toast.show('Unexpected Behavior Detected.', { native: true })
             mainStore.resetAchievementsResetProgressForm()
         }

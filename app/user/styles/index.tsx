@@ -30,15 +30,14 @@ export default function UserStyles() {
         try {
             mainStore.updateStylesSettings({ isSubmitting: true, isDisabled: true })
 
-            console.log(mainStore.stylesSettings)
+            // console.log(mainStore.stylesSettings)
 
             toast.show('Reset To Default', { native: true })
-
             mainStore.updateCurrentStyleTheme('dark')
             mainStore.resetStylesSettings()
 
         } catch (error: any) {
-            console.log(error)
+            // console.log(error)
             toast.show('Unexpected Behavior Detected', { native: true })
             mainStore.resetStylesSettings()
         }

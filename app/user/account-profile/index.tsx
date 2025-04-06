@@ -1,8 +1,8 @@
 import { router } from 'expo-router'
 import { ScrollView } from 'react-native'
-import { useToastController } from '@tamagui/toast'
-import { CircleUserRound } from '@tamagui/lucide-icons'
 import { Avatar, Button, Input, XStack, YStack, Paragraph, Image, Checkbox, Label, Form, Spinner, H6 } from 'tamagui'
+import { CircleUserRound } from '@tamagui/lucide-icons'
+import { useToastController } from '@tamagui/toast'
 import * as FileSystem from "expo-file-system";
 import * as ImagePicker from 'expo-image-picker';
 
@@ -87,7 +87,7 @@ export default function UserAccountProfile() {
             router.push('/')
 
         } catch (error: any) {
-            console.log(error)
+            // console.log(error)
             toast.show('Something\'s Wrong. Please Try Again', { native: true })
             mainStore.updateApplicationGlobalsToUnSubmitting()
             mainStore.resetAccountProfileForm()
