@@ -67,6 +67,7 @@ export default function LogIn() {
             }
 
             toast.show('Success! Please Wait', { native: true })
+            mainStore.updateCurrentStyleTheme(userGetResult.data[0].metadata?.styles?.theme)
             mainStore.updateUserAccount({ userData: userGetResult.data[0], userPassword: mainStore.authLogInForm?.password })
             mainStore.updateApplicationGlobalsToUnSubmitting()
             mainStore.resetAuthForms()

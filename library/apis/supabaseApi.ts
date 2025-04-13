@@ -335,11 +335,12 @@ export class SupabaseAPI extends API {
                 client = client.eq(routerParameter, routerParameters[routerParameter])
             }
             client = callback(client)
-            client = (await this.supabaseDatabase.executeClient(client)).data
-            if (client.status !== 204) {
-                return new FailedResult(client).toObjectWithMerge({ status: client.status })
+            client = client.select()
+            client = (await this.supabaseDatabase.executeClient(client))
+            if (!client.isSuccessful) {
+                return new FailedResult(client.error).toObjectWithMerge({ status: 500 })
             }
-            return new SuccessfulResult(client.data).toObjectWithMerge({ status: 200 })
+            return new SuccessfulResult(client.data?.data).toObjectWithMerge({ status: 200 })
 
         } catch (error: any) {
             return new FailedResult(error.message).toObjectWithMerge({ status: 500 })

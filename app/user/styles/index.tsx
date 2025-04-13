@@ -8,6 +8,9 @@ import useMainStore from '@/store/mainStore'
 import { CommonHeader } from '@/components/CommonHeader'
 import { CommonPicker } from '@/components/CommonPicker'
 import { ConfirmationAlertDialog } from '@/components/ConfirmationAlertDialog'
+import { appplicationThemeSelections, defaultConstants } from '@/utils/defaultConstants'
+
+import { SupabaseAPI } from '@/library/apis/supabaseApi'
 
 export default function UserStyles() {
     const mainStore: any = useMainStore()
@@ -18,8 +21,31 @@ export default function UserStyles() {
     }
 
     const handleSelectItemOnPress: Function = async (item: any) => {
-        mainStore.updateCurrentStyleTheme(item.value)
+        mainStore.updateApplicationGlobalsToSubmitting()
+
+        const userMetaData: any = mainStore.extractUserData(mainStore.userAccount).metadata
+        userMetaData.styles.theme = item.value
+        
+        SupabaseAPI.singleton.updateOne(
+            'user',
+            { email: mainStore.extractUserData(mainStore.userAccount).email }, {
+                data: {
+                    metadata: userMetaData
+                }
+            }
+        ).then((response: any) => {
+            if (!response.isSuccessful) {
+                toast.show('Something\'s Wrong. Please Try Again', { native: true })
+                mainStore.updateApplicationGlobalsToUnSubmitting()
+                return
+            }
+
+            mainStore.updateUserAccount({ userData: response.data[0] })
+        })
+
         toast.show('Updated', { native: true })
+        mainStore.updateCurrentStyleTheme(item.value)
+        mainStore.updateApplicationGlobalsToUnSubmitting()
     }
 
     const handleCancelContentAlertDialogOnPress: Function = async () => {
@@ -28,25 +54,37 @@ export default function UserStyles() {
 
     const handleAcceptContentAlertDialogOnPress: Function = async () => {
         try {
-            mainStore.updateStylesSettings({ isSubmitting: true, isDisabled: true })
+            mainStore.updateApplicationGlobalsToSubmitting()
 
-            // console.log(mainStore.stylesSettings)
+            const userMetaData: any = mainStore.extractUserData(mainStore.userAccount).metadata
+            userMetaData.styles.theme = defaultConstants.APPLICATION_THEME
+
+            SupabaseAPI.singleton.updateOne(
+                'user',
+                { email: mainStore.extractUserData(mainStore.userAccount).email }, {
+                    data: {
+                        metadata: userMetaData
+                    }
+                }
+            ).then((response: any) => {
+                if (!response.isSuccessful) {
+                    toast.show('Something\'s Wrong. Please Try Again', { native: true })
+                    mainStore.updateApplicationGlobalsToUnSubmitting()
+                    return
+                }
+
+                mainStore.updateUserAccount({ userData: response.data[0] })
+            })
 
             toast.show('Reset To Default', { native: true })
-            mainStore.updateCurrentStyleTheme('dark')
-            mainStore.resetStylesSettings()
+            mainStore.updateCurrentStyleTheme(defaultConstants.APPLICATION_THEME)
+            mainStore.updateApplicationGlobalsToUnSubmitting()
 
         } catch (error: any) {
-            // console.log(error)
             toast.show('Unexpected Behavior Detected', { native: true })
             mainStore.resetStylesSettings()
         }
     }
-
-    const appThemeSelections: any = [
-        { label: 'Dark Theme', value: 'dark' },
-        { label: 'Light Theme', value: 'light' }
-    ]
 
     return (
         <>
@@ -56,7 +94,7 @@ export default function UserStyles() {
                     <YStack gap='$3'>                   
                         <XStack justifyContent='space-between' alignItems='center'>
                             <Paragraph>App Theme</Paragraph>
-                            <CommonPicker value={mainStore.currentStyleTheme} selections={appThemeSelections} onPressSelectModalItem={handleSelectItemOnPress} title='App Theme'/>
+                            <CommonPicker value={mainStore.currentStyleTheme} selections={appplicationThemeSelections} onPressSelectModalItem={handleSelectItemOnPress} title='App Theme'/>
                         </XStack>
                         <ConfirmationAlertDialog
                             triggerContent={(<Button color='$white2' backgroundColor='$red9' pressStyle={{ borderWidth: '$0', backgroundColor: '$red8' }} icon={(mainStore.stylesSettings?.isSubmitting) ? () => <Spinner color='$white2' /> : undefined}>Reset To Default</Button>)}

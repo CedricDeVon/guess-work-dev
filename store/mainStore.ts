@@ -10,10 +10,15 @@ const useMainStore = create((set: any) => ({
     extractUserAccount: (data: any) => {
         return (data) ? JSON.parse(Method2CipherCryptographer.singleton.decrypt(data).data) : ''
     },
+    extractUserData: (data: any) => {
+        data = JSON.parse(Method2CipherCryptographer.singleton.decrypt(data).data)
+        return (data) ? JSON.parse(Method2CipherCryptographer.singleton.decrypt(data.userData).data) : ''
+    },
     updateUserAccount: (value: any) => {
         return set((state: any) => {
             let newData: any = (state.userAccount) ? JSON.parse(Method2CipherCryptographer.singleton.decrypt(state.userAccount).data) : {}
-            value.userPassword = Method2CipherCryptographer.singleton.encrypt(value.userPassword).data
+            value.userPassword = (value.userPassword) ? Method2CipherCryptographer.singleton.encrypt(value.userPassword).data : newData.userPassword
+            value.userData = (value.userData) ? Method2CipherCryptographer.singleton.encrypt(JSON.stringify(value.userData)).data : newData.userData
             newData = Method2CipherCryptographer.singleton.encrypt(JSON.stringify({ ...newData, ...value })).data
             Storage.setItem('knight-vision_user-account', JSON.stringify(newData))
             return { userAccount: newData }
@@ -46,6 +51,8 @@ const useMainStore = create((set: any) => ({
 
     currentStyleTheme: JSON.parse(Storage.getItemSync('knight-vision_current-style-theme')) || defaultConstants.APPLICATION_THEME,
     updateCurrentStyleTheme: (value: any) => {
+        value = value || 'dark'
+
         return set((state: any) => {
             let newStyleTheme: any = state.currentStyleTheme
             if (!newStyleTheme) {
